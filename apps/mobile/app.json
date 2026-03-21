@@ -1,0 +1,9 @@
+{
+  "expo": {
+    "name": "Vidhi Vidhan",
+    "slug": "vidhi-vidhan",
+    "scheme": "vidhividhan",
+    "plugins": ["expo-router"],
+    "android": { "package": "com.vidhividhan.app" }
+  }
+}

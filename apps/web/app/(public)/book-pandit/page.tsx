@@ -1,0 +1,2 @@
+import { BookingForm } from '@/components/forms/booking-form';
+export default function Page() { return <div className="container-shell py-16"><h1 className="text-4xl font-bold">Book a Pandit</h1><p className="mt-4 max-w-2xl text-stone-600">Share your ritual requirement, preferred date, language, and samagri needs. Our team will create a lead, assign a booking ID, and continue on WhatsApp.</p><div className="mt-8"><BookingForm /></div></div>; }

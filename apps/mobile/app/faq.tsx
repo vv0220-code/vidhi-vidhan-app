@@ -1,0 +1,3 @@
+import { ScrollView, Text, View } from 'react-native';
+const faqs = ['How does booking work?', 'Can samagri be arranged?', 'Are pandits verified?'];
+export default function Screen() { return <ScrollView style={{ flex:1, backgroundColor:'#fff8eb' }} contentContainerStyle={{ padding:20, gap:14 }}><Text style={{ fontSize:30, fontWeight:'800' }}>FAQ</Text>{faqs.map((item)=><View key={item} style={{ backgroundColor:'white', borderRadius:18, padding:16 }}><Text style={{ fontWeight:'700' }}>{item}</Text><Text style={{ color:'#666', marginTop:8 }}>Starter answer content synced with the web platform structure.</Text></View>)}</ScrollView>; }

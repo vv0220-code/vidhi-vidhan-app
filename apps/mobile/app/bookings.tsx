@@ -1,0 +1,2 @@
+import { ScrollView, Text, View } from 'react-native';
+export default function Screen() { return <ScrollView style={{ flex:1, backgroundColor:'#fff8eb' }} contentContainerStyle={{ padding:20, gap:14 }}><Text style={{ fontSize:30, fontWeight:'800' }}>My Bookings</Text>{['VV-01201 · Griha Pravesh · Confirmed','VV-01202 · Satyanarayan Katha · Contacted'].map((item)=><View key={item} style={{ backgroundColor:'white', borderRadius:18, padding:16 }}><Text style={{ fontWeight:'700' }}>{item}</Text></View>)}</ScrollView>; }

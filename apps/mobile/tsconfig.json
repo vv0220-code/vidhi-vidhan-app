@@ -1,0 +1,8 @@
+{
+  "extends": "../../packages/config/tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "types": ["expo-router/typed-routes"]
+  },
+  "include": ["app", "src", "expo-env.d.ts"]
+}

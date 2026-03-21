@@ -1,0 +1,1 @@
+import { NextResponse } from 'next/server'; import { blogPosts, faqs, testimonials } from '@/lib/data'; export async function GET() { return NextResponse.json({ blogPosts, faqs, testimonials }); }

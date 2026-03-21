@@ -1,0 +1,1 @@
+export default function Page() { return <div className="container-shell py-16"><h1 className="text-4xl font-bold">Refund Policy</h1><p className="mt-4 max-w-3xl text-stone-600">Vidhi Vidhan presents a polished bilingual refund policy page with meaningful starter copy, local-first positioning, and launch-ready structure for Jabalpur-focused ritual services.</p></div>; }

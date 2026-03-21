@@ -1,0 +1,2 @@
+import { panditRegistrationSchema } from '@vidhi-vidhan/shared'; import { NextResponse } from 'next/server';
+export async function POST(request: Request) { const json = await request.json(); panditRegistrationSchema.parse(json); return NextResponse.json({ ok: true, message: 'Registration submitted. Admin verification is pending.' }); }
