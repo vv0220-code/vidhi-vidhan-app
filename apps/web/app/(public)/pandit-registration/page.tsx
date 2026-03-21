@@ -1,0 +1,2 @@
+import { PanditRegistrationForm } from '@/components/forms/pandit-registration-form';
+export default function Page() { return <div className="container-shell py-16"><h1 className="text-4xl font-bold">Pandit Registration</h1><p className="mt-4 max-w-2xl text-stone-600">Join Vidhi Vidhan as a verified pandit and receive high-intent ritual leads from Jabalpur and upcoming Madhya Pradesh cities.</p><div className="mt-8"><PanditRegistrationForm /></div></div>; }

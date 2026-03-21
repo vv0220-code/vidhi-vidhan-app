@@ -1,0 +1,2 @@
+import { testimonials } from '@/lib/data';
+export default function Page() { return <div className="container-shell py-16"><h1 className="text-4xl font-bold">Testimonials</h1><div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">{testimonials.map((item) => <div key={item.id} className="card p-6"><p className="text-sm leading-7 text-stone-600">“{item.quote}”</p><p className="mt-4 font-semibold">{item.name}</p><p className="text-sm text-stone-500">{item.locality}</p></div>)}</div></div>; }

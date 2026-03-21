@@ -1,0 +1,2 @@
+import Link from 'next/link'; import { blogPosts } from '@/lib/data';
+export default function Page() { return <div className="container-shell py-16"><h1 className="text-4xl font-bold">Blog / Articles / Festival / Muhurat</h1><div className="mt-10 grid gap-6">{blogPosts.map((post) => <Link key={post.slug} href={`/blog/${post.slug}`} className="card p-6"><p className="text-sm text-brand-vermilion">{post.category}</p><h2 className="mt-2 text-2xl font-semibold">{post.title}</h2><p className="mt-3 text-sm text-stone-600">{post.excerpt}</p></Link>)}</div></div>; }

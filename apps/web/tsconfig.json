@@ -1,0 +1,13 @@
+{
+  "extends": "../../packages/config/tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./*"],
+      "@vidhi-vidhan/shared": ["../../packages/shared/src/index.ts"],
+      "@vidhi-vidhan/ui": ["../../packages/ui/src/index.tsx"]
+    },
+    "plugins": [{ "name": "next" }]
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}

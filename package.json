@@ -1,0 +1,15 @@
+{
+  "name": "vidhi-vidhan-platform",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "dev:web": "pnpm --filter web dev",
+    "dev:mobile": "pnpm --filter mobile start",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "prisma:generate": "pnpm --filter web prisma generate",
+    "prisma:seed": "pnpm --filter web prisma db seed"
+  }
+}

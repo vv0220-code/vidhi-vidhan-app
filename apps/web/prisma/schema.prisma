@@ -1,0 +1,221 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  PANDIT
+  ADMIN
+}
+
+enum BookingStatus {
+  NEW
+  CONTACTED
+  ASSIGNED
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(USER)
+  phone        String?
+  profile      UserProfile?
+  bookings     Booking[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model UserProfile {
+  id        String   @id @default(cuid())
+  userId     String  @unique
+  address    String?
+  cityId     String?
+  language   String?
+  favorites  String[]
+  user       User    @relation(fields: [userId], references: [id])
+  city       City?   @relation(fields: [cityId], references: [id])
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  userId     String  @unique
+  user       User    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model City {
+  id          String    @id @default(cuid())
+  name        String
+  nameHi      String
+  slug        String    @unique
+  state       String
+  seoTitle    String
+  seoDescription String
+  services    Service[] @relation("CityServices")
+  bookings    Booking[]
+  pandits     Pandit[]  @relation("PanditCities")
+}
+
+model ServiceCategory {
+  id       String    @id @default(cuid())
+  name     String
+  slug     String    @unique
+  services Service[]
+}
+
+model Service {
+  id               String   @id @default(cuid())
+  categoryId       String
+  slug             String   @unique
+  titleEn          String
+  titleHi          String
+  shortDescription String
+  longDescription  String
+  benefits         String[]
+  whoShouldBook    String[]
+  occasions        String[]
+  samagri          String[]
+  duration         String
+  price            String
+  seoTitle         String
+  seoDescription   String
+  category         ServiceCategory @relation(fields: [categoryId], references: [id])
+  cities           City[]   @relation("CityServices")
+  bookings         Booking[]
+}
+
+model Pandit {
+  id                String   @id @default(cuid())
+  userId            String?  @unique
+  fullName          String
+  email             String   @unique
+  mobile            String
+  profilePhotoUrl   String?
+  address           String
+  city              String
+  experienceYears   Int
+  languages         String[]
+  specializations   String[]
+  availableCities   City[]   @relation("PanditCities")
+  bio               String
+  availability      String
+  bankDetails       String?
+  verificationStatus String  @default("PENDING")
+  documents         PanditDocument[]
+  bookings          Booking[]
+}
+
+model PanditDocument {
+  id        String   @id @default(cuid())
+  panditId   String
+  type      String
+  url       String
+  status    String   @default("PENDING")
+  pandit    Pandit   @relation(fields: [panditId], references: [id])
+}
+
+model Booking {
+  id                String   @id @default(cuid())
+  bookingCode       String   @unique
+  userId            String?
+  panditId          String?
+  cityId            String?
+  serviceId         String
+  status            BookingStatus @default(NEW)
+  fullName          String
+  mobile            String
+  email             String
+  address           String
+  preferredDate     DateTime
+  preferredTime     String
+  languagePreference String
+  samagriRequired   Boolean
+  budgetPreference  String
+  notes             String?
+  user              User?    @relation(fields: [userId], references: [id])
+  pandit            Pandit?  @relation(fields: [panditId], references: [id])
+  city              City?    @relation(fields: [cityId], references: [id])
+  service           Service  @relation(fields: [serviceId], references: [id])
+  statusHistory     BookingStatusHistory[]
+  createdAt         DateTime @default(now())
+}
+
+model BookingStatusHistory {
+  id         String   @id @default(cuid())
+  bookingId  String
+  status     BookingStatus
+  notes      String?
+  createdAt  DateTime @default(now())
+  booking    Booking  @relation(fields: [bookingId], references: [id])
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  city      String
+  quote     String
+  rating    Int
+  featured  Boolean  @default(false)
+}
+
+model FAQ {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String
+  category  String
+}
+
+model BlogPost {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  title           String
+  excerpt         String
+  content         String
+  seoTitle        String
+  seoDescription  String
+  published       Boolean  @default(true)
+}
+
+model Inquiry {
+  id        String   @id @default(cuid())
+  name      String
+  email     String?
+  mobile    String
+  message   String
+  source    String
+  createdAt DateTime @default(now())
+}
+
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String?
+  title     String
+  body      String
+  channel   String
+  status    String
+  createdAt DateTime @default(now())
+}
+
+model MediaAsset {
+  id        String   @id @default(cuid())
+  url       String
+  type      String
+  alt       String?
+  createdAt DateTime @default(now())
+}

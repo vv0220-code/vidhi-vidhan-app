@@ -1,0 +1,2 @@
+import { ScrollView, Text, View } from 'react-native';
+export default function Screen() { return <ScrollView style={{ flex:1, backgroundColor:'#fff8eb' }} contentContainerStyle={{ padding:20, gap:14 }}><Text style={{ fontSize:30, fontWeight:'800' }}>Support / Contact</Text><View style={{ backgroundColor:'white', borderRadius:18, padding:16 }}><Text>Phone: 8269250480</Text><Text>Email: vidhividhan0220@gmail.com</Text><Text>Instagram: @vidhividhan0220</Text><Text>Facebook: Vidhi Vidhan</Text></View></ScrollView>; }

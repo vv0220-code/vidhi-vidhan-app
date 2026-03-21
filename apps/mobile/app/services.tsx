@@ -1,0 +1,3 @@
+import { ScrollView, Text, View } from 'react-native';
+const services = ['Griha Pravesh Puja', 'Satyanarayan Katha', 'Marriage / Vivah Puja', 'Rudrabhishek', 'Navgrah Shanti Puja'];
+export default function Screen() { return <ScrollView style={{ flex:1, backgroundColor:'#fff8eb' }} contentContainerStyle={{ padding:20, gap:12 }}>{services.map((s)=><View key={s} style={{ backgroundColor:'white', borderRadius:20, padding:18 }}><Text style={{ fontSize:18, fontWeight:'700' }}>{s}</Text><Text style={{ marginTop:6, color:'#666' }}>Bilingual ritual listing connected to shared backend APIs.</Text></View>)}</ScrollView>; }

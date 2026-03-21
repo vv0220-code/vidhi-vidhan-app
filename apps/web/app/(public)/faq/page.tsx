@@ -1,0 +1,2 @@
+import { faqs } from '@/lib/data';
+export default function Page() { return <div className="container-shell py-16"><h1 className="text-4xl font-bold">FAQ</h1><div className="mt-10 grid gap-4">{faqs.map((item) => <div key={item.question} className="card p-6"><h2 className="font-semibold">{item.question}</h2><p className="mt-3 text-sm text-stone-600">{item.answer}</p></div>)}</div></div>; }
