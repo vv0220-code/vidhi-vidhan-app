@@ -1,86 +1,108 @@
-# Vidhi Vidhan Platform
+# Vidhi Vidhan (विधि विधान) – Jabalpur Launch Platform
 
-Vidhi Vidhan is a bilingual Hindu ritual services platform designed for Jabalpur-first launch and scalable expansion across Madhya Pradesh and India. This monorepo contains a production-oriented MVP scaffold for:
+Tagline: **Your Ritual, Our Responsibility** / **आपका विधि-विधान, हमारी ज़िम्मेदारी।**
 
-- Public marketing website in Next.js
-- Role-aware dashboards for admin, pandit, and user journeys
-- Shared backend API routes and validation
-- Prisma database schema with launch seed data
-- Expo React Native Android app scaffold for customers
-- SEO-ready services, city pages, blog architecture, sitemap, and robots setup
+## 1) Architecture summary
 
-## Monorepo structure
+- **Monorepo** with web + mobile-ready apps.
+- **Web app**: Next.js App Router + TypeScript + Tailwind (premium devotional UI).
+- **Data layer**: Prisma + PostgreSQL.
+- **Auth-ready**: NextAuth-compatible role routes for Customer, Pandit, Admin.
+- **Commerce + booking**: service booking APIs, product catalog, cart/checkout foundation.
+- **Localization**: bilingual Hindi-English content for homepage, services, CTAs, and key flows.
+- **PWA/App-ready**: route + component architecture designed for easy Android/iOS packaging later.
 
-- `apps/web` – Next.js App Router website, dashboards, API routes, Prisma schema, seed script
-- `apps/mobile` – Expo Router mobile app scaffold
-- `packages/shared` – shared Zod schemas, config, and types
-- `packages/ui` – small reusable UI primitives for web
-- `packages/config` – base TypeScript config
+## 2) Folder structure
 
-## Quick start
+```txt
+apps/
+  web/
+    app/
+      (public)/...pages
+      api/...routes
+    components/
+    lib/
+    prisma/
+  mobile/
+packages/
+  shared/
+  ui/
+  config/
+```
+
+## 3) Route map
+
+- `/`
+- `/about`
+- `/contact`
+- `/jabalpur/pandit-booking`
+- `/services`
+- `/services/[slug]`
+- `/products`
+- `/products/[slug]`
+- `/cart`
+- `/checkout`
+- `/pandit/register`
+- `/pandit/login`
+- `/pandit/dashboard`
+- `/customer/login`
+- `/customer/dashboard`
+- `/admin/login`
+- `/admin/dashboard`
+- `/bookings/[id]`
+- `/orders/[id]`
+- `/privacy-policy`
+- `/terms`
+- `/refund-policy`
+- `/cancellation-policy`
+
+## 4) Database schema plan
+
+Prisma models include:
+`User, CustomerProfile, PanditProfile, AdminProfile, ServiceCategory, PujaService, PujaDetailContent, ProductCategory, Product, ProductImage, Booking, BookingStatusHistory, Inquiry, Address, Testimonial, Banner, FAQ, Review, Order, OrderItem, SiteSetting, City, Area`.
+
+## 5) Setup (beginner friendly)
 
 1. Install dependencies:
    ```bash
    pnpm install
    ```
-2. Copy environment variables:
+2. Copy env:
    ```bash
    cp apps/web/.env.example apps/web/.env
    ```
-3. Generate Prisma client and seed database:
+3. Push schema + seed:
    ```bash
-   createdb vidhi_vidhan
    pnpm --filter web prisma db push
-   pnpm prisma:seed
+   pnpm --filter web prisma db seed
    ```
-4. Start the website:
+4. Run web app:
    ```bash
-   pnpm dev:web
+   pnpm --filter web dev
    ```
-5. Start the mobile app:
+5. Run mobile scaffold:
    ```bash
-   pnpm dev:mobile
+   pnpm --filter mobile start
    ```
 
-## Demo auth accounts
+## Replace branding/assets/contact quickly
 
-- Admin: `admin@vidhividhan.in` / `Admin@123`
-- Pandit: `pandit@vidhividhan.in` / `Pandit@123`
-- User: `user@vidhividhan.in` / `User@123`
+- Logo: `public/branding/`
+- Puja images: `public/poojas/`
+- Pandit photos: `public/pandits/`
+- Product images: `public/products/`
+- Banners: `public/banners/`
+- Contact settings and city defaults: `apps/web/lib/data.ts` + `packages/shared/src/index.ts`
+- Service prices and titles: `apps/web/lib/data.ts`
 
-## Feature coverage
+## Content seeding
 
-- Home page with bilingual hero, quick booking form, service grid, testimonials, FAQ preview, and sticky WhatsApp/call CTA
-- SEO landing pages for services, cities, blog, and policy pages
-- Admin, pandit, and user dashboard entry points
-- Booking API and pandit registration API with Zod validation
-- Prisma schema covering users, profiles, pandits, services, cities, bookings, history, testimonials, FAQs, blog posts, inquiries, settings, notifications, and media assets
-- Seed data for Jabalpur, 15 services, 10 testimonials, 10 FAQs, 5 blog posts, admin user, and sample pandit profiles
-- Expo mobile app with home, services, book, bookings, FAQ, support, and profile screens
+Read: `content-seeding-instructions.md`
 
 ## Deployment notes
 
-### Web
-- Deploy `apps/web` on Vercel or a Node-compatible platform.
-- Configure `DATABASE_URL`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, and messaging/payment integrations.
-- Replace placeholder notification and payment modules with production providers.
+- Deploy `apps/web` on Vercel.
+- Attach managed PostgreSQL.
+- Set environment variables from `.env.example`.
+- Add Razorpay and Cloudinary keys when going live.
 
-### Mobile
-- Use EAS Build for Android packaging.
-- Point the app to the deployed API base URL through Expo environment config.
-
-## Integration checklist
-
-- Replace demo credential auth with database-backed password hashing and secure account creation.
-- Connect WhatsApp automation provider such as Interakt, Twilio, or Meta Cloud API.
-- Implement cloud file upload storage for pandit profile images and document verification.
-- Add Razorpay order creation and payment capture flow where needed.
-- Expand dashboard CRUD operations with persistent database writes.
-
-## Recommended next phase
-
-- Add multilingual content management in admin
-- Implement booking assignment workflow persistence
-- Add analytics charts and export tools
-- Add push notifications and OTP login
-- Add future pandit mobile app using the same backend contracts

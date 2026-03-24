@@ -1,0 +1,1 @@
+export default function Policy(){return <div className=\"container-shell py-12\"><h1 className=\"text-3xl font-bold\">terms</h1><p className=\"mt-2\">SEO-ready static policy page for Vidhi Vidhan Jabalpur launch.</p></div>}

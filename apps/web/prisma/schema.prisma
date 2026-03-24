@@ -7,215 +7,131 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  USER
+enum UserRole {
+  CUSTOMER
   PANDIT
   ADMIN
 }
 
 enum BookingStatus {
-  NEW
-  CONTACTED
-  ASSIGNED
-  CONFIRMED
-  COMPLETED
-  CANCELLED
+  pending
+  inquiry_received
+  awaiting_confirmation
+  confirmed
+  pandit_assigned
+  in_progress
+  completed
+  cancelled
 }
 
 model User {
-  id           String   @id @default(cuid())
-  name         String
-  email        String   @unique
-  passwordHash String
-  role         Role     @default(USER)
-  phone        String?
-  profile      UserProfile?
-  bookings     Booking[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id              String            @id @default(cuid())
+  name            String
+  email           String            @unique
+  passwordHash    String?
+  mobile          String?
+  role            UserRole          @default(CUSTOMER)
+  customerProfile CustomerProfile?
+  panditProfile   PanditProfile?
+  adminProfile    AdminProfile?
+  addresses       Address[]
+  bookings        Booking[]         @relation("CustomerBookings")
+  orders          Order[]
+  inquiries       Inquiry[]
+  reviews         Review[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
 }
 
-model UserProfile {
-  id        String   @id @default(cuid())
-  userId     String  @unique
-  address    String?
-  cityId     String?
-  language   String?
-  favorites  String[]
-  user       User    @relation(fields: [userId], references: [id])
-  city       City?   @relation(fields: [cityId], references: [id])
+model CustomerProfile { id String @id @default(cuid()) userId String @unique preferredLanguage String? wishlist Json? notificationsEnabled Boolean @default(true) user User @relation(fields:[userId],references:[id]) }
+model PanditProfile {
+  id String @id @default(cuid())
+  userId String @unique
+  cityId String?
+  areaId String?
+  fullAddress String
+  yearsOfExperience Int
+  languagesSpoken String[]
+  expertise String[]
+  shortBio String
+  profilePhotoUrl String?
+  aadhaarUrl String?
+  panUrl String?
+  certificateUrl String?
+  bankDetails String?
+  availabilitySchedule String
+  serviceRadiusKm Int @default(10)
+  homeVisit Boolean @default(true)
+  verificationStatus String @default("pending")
+  earningsTotal Int @default(0)
+  user User @relation(fields:[userId],references:[id])
+  city City? @relation(fields:[cityId],references:[id])
+  area Area? @relation(fields:[areaId],references:[id])
+  assignedBookings Booking[] @relation("AssignedPanditBookings")
 }
+model AdminProfile { id String @id @default(cuid()) userId String @unique user User @relation(fields:[userId],references:[id]) }
 
-model Admin {
-  id        String   @id @default(cuid())
-  userId     String  @unique
-  user       User    @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
+model ServiceCategory { id String @id @default(cuid()) nameEn String nameHi String slug String @unique services PujaService[] }
+model PujaService {
+  id String @id @default(cuid())
+  categoryId String
+  slug String @unique
+  titleEn String
+  titleHi String
+  shortIntro String
+  priceText String
+  durationText String
+  whoFor String[]
+  benefits String[]
+  procedureSummary String
+  samagriSummary String
+  isPriceConfigurable Boolean @default(false)
+  isFeatured Boolean @default(false)
+  category ServiceCategory @relation(fields:[categoryId],references:[id])
+  detailContent PujaDetailContent?
+  bookings Booking[]
+  reviews Review[]
 }
+model PujaDetailContent { id String @id @default(cuid()) pujaServiceId String @unique origin String story String description String benefits String vidhi String samagri String pujaService PujaService @relation(fields:[pujaServiceId],references:[id]) }
 
-model City {
-  id          String    @id @default(cuid())
-  name        String
-  nameHi      String
-  slug        String    @unique
-  state       String
-  seoTitle    String
-  seoDescription String
-  services    Service[] @relation("CityServices")
-  bookings    Booking[]
-  pandits     Pandit[]  @relation("PanditCities")
-}
-
-model ServiceCategory {
-  id       String    @id @default(cuid())
-  name     String
-  slug     String    @unique
-  services Service[]
-}
-
-model Service {
-  id               String   @id @default(cuid())
-  categoryId       String
-  slug             String   @unique
-  titleEn          String
-  titleHi          String
-  shortDescription String
-  longDescription  String
-  benefits         String[]
-  whoShouldBook    String[]
-  occasions        String[]
-  samagri          String[]
-  duration         String
-  price            String
-  seoTitle         String
-  seoDescription   String
-  category         ServiceCategory @relation(fields: [categoryId], references: [id])
-  cities           City[]   @relation("CityServices")
-  bookings         Booking[]
-}
-
-model Pandit {
-  id                String   @id @default(cuid())
-  userId            String?  @unique
-  fullName          String
-  email             String   @unique
-  mobile            String
-  profilePhotoUrl   String?
-  address           String
-  city              String
-  experienceYears   Int
-  languages         String[]
-  specializations   String[]
-  availableCities   City[]   @relation("PanditCities")
-  bio               String
-  availability      String
-  bankDetails       String?
-  verificationStatus String  @default("PENDING")
-  documents         PanditDocument[]
-  bookings          Booking[]
-}
-
-model PanditDocument {
-  id        String   @id @default(cuid())
-  panditId   String
-  type      String
-  url       String
-  status    String   @default("PENDING")
-  pandit    Pandit   @relation(fields: [panditId], references: [id])
-}
+model ProductCategory { id String @id @default(cuid()) nameEn String nameHi String slug String @unique products Product[] }
+model Product { id String @id @default(cuid()) categoryId String slug String @unique nameEn String nameHi String description String price Int stock Int isActive Boolean @default(true) category ProductCategory @relation(fields:[categoryId],references:[id]) images ProductImage[] orderItems OrderItem[] }
+model ProductImage { id String @id @default(cuid()) productId String imageUrl String altText String? product Product @relation(fields:[productId],references:[id]) }
 
 model Booking {
-  id                String   @id @default(cuid())
-  bookingCode       String   @unique
-  userId            String?
-  panditId          String?
-  cityId            String?
-  serviceId         String
-  status            BookingStatus @default(NEW)
-  fullName          String
-  mobile            String
-  email             String
-  address           String
-  preferredDate     DateTime
-  preferredTime     String
+  id String @id @default(cuid())
+  customerId String?
+  panditId String?
+  pujaServiceId String
+  status BookingStatus @default(pending)
+  date DateTime
+  timeLabel String
+  customerName String
+  mobile String
+  address String
+  cityName String
+  notes String?
   languagePreference String
-  samagriRequired   Boolean
-  budgetPreference  String
-  notes             String?
-  user              User?    @relation(fields: [userId], references: [id])
-  pandit            Pandit?  @relation(fields: [panditId], references: [id])
-  city              City?    @relation(fields: [cityId], references: [id])
-  service           Service  @relation(fields: [serviceId], references: [id])
-  statusHistory     BookingStatusHistory[]
-  createdAt         DateTime @default(now())
-}
-
-model BookingStatusHistory {
-  id         String   @id @default(cuid())
-  bookingId  String
-  status     BookingStatus
-  notes      String?
-  createdAt  DateTime @default(now())
-  booking    Booking  @relation(fields: [bookingId], references: [id])
-}
-
-model Testimonial {
-  id        String   @id @default(cuid())
-  name      String
-  city      String
-  quote     String
-  rating    Int
-  featured  Boolean  @default(false)
-}
-
-model FAQ {
-  id        String   @id @default(cuid())
-  question  String
-  answer    String
-  category  String
-}
-
-model BlogPost {
-  id              String   @id @default(cuid())
-  slug            String   @unique
-  title           String
-  excerpt         String
-  content         String
-  seoTitle        String
-  seoDescription  String
-  published       Boolean  @default(true)
-}
-
-model Inquiry {
-  id        String   @id @default(cuid())
-  name      String
-  email     String?
-  mobile    String
-  message   String
-  source    String
+  paymentMethod String
+  advanceAmount Int?
+  customer User? @relation("CustomerBookings",fields:[customerId],references:[id])
+  pandit PanditProfile? @relation("AssignedPanditBookings",fields:[panditId],references:[id])
+  pujaService PujaService @relation(fields:[pujaServiceId],references:[id])
+  statusHistory BookingStatusHistory[]
   createdAt DateTime @default(now())
 }
+model BookingStatusHistory { id String @id @default(cuid()) bookingId String status BookingStatus note String? booking Booking @relation(fields:[bookingId],references:[id]) createdAt DateTime @default(now()) }
 
-model Setting {
-  id        String   @id @default(cuid())
-  key       String   @unique
-  value     String
-}
+model Inquiry { id String @id @default(cuid()) userId String? name String mobile String email String? message String source String @default("website") user User? @relation(fields:[userId],references:[id]) createdAt DateTime @default(now()) }
+model Address { id String @id @default(cuid()) userId String label String? line1 String line2 String? area String city String state String pincode String user User @relation(fields:[userId],references:[id]) }
+model Testimonial { id String @id @default(cuid()) name String nameHi String? city String quoteEn String quoteHi String? rating Int @default(5) isFeatured Boolean @default(false) }
+model Banner { id String @id @default(cuid()) titleEn String titleHi String subtitleEn String subtitleHi String imageUrl String ctaLabel String? ctaUrl String? isActive Boolean @default(true) sortOrder Int @default(0) }
+model FAQ { id String @id @default(cuid()) questionEn String questionHi String answerEn String answerHi String isFeatured Boolean @default(false) }
+model Review { id String @id @default(cuid()) userId String pujaServiceId String rating Int comment String? user User @relation(fields:[userId],references:[id]) pujaService PujaService @relation(fields:[pujaServiceId],references:[id]) }
 
-model Notification {
-  id        String   @id @default(cuid())
-  userId    String?
-  title     String
-  body      String
-  channel   String
-  status    String
-  createdAt DateTime @default(now())
-}
+model Order { id String @id @default(cuid()) userId String? orderNumber String @unique status String totalAmount Int paymentMethod String shippingAddress String user User? @relation(fields:[userId],references:[id]) items OrderItem[] createdAt DateTime @default(now()) }
+model OrderItem { id String @id @default(cuid()) orderId String productId String quantity Int unitPrice Int order Order @relation(fields:[orderId],references:[id]) product Product @relation(fields:[productId],references:[id]) }
 
-model MediaAsset {
-  id        String   @id @default(cuid())
-  url       String
-  type      String
-  alt       String?
-  createdAt DateTime @default(now())
-}
+model SiteSetting { id String @id @default(cuid()) key String @unique value String }
+model City { id String @id @default(cuid()) name String nameHi String slug String @unique state String serviceAreas Area[] pandits PanditProfile[] }
+model Area { id String @id @default(cuid()) cityId String name String slug String city City @relation(fields:[cityId],references:[id]) pandits PanditProfile[] }

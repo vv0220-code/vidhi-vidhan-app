@@ -1,0 +1,2 @@
+import { getProductBySlug } from '@/lib/data'; import { notFound } from 'next/navigation';
+export default async function ProductDetail({params}:{params:Promise<{slug:string}>}){const {slug}=await params; const p=getProductBySlug(slug); if(!p) return notFound(); return <div className="container-shell py-12"><h1 className="text-3xl font-bold">{p.nameHi}</h1><p>{p.nameEn}</p><p className="mt-2">{p.price}</p><p className="mt-3">Inventory-ready product foundation with COD + online placeholder checkout.</p></div>}

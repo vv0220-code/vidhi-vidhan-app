@@ -1,0 +1,1 @@
+export default function JabalpurLanding(){return <div className="container-shell py-12"><h1 className="text-3xl font-bold">Book experienced pandits in Jabalpur</h1><p className="mt-3">Serving Jabalpur with home visit pandit services, transparent pricing, and local WhatsApp support.</p></div>}

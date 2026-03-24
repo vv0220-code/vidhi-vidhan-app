@@ -1,0 +1,1 @@
+import Link from 'next/link'; export default function Cart(){return <div className="container-shell py-12"><h1 className="text-3xl font-bold">Cart</h1><p className="mt-2">Cart state is app-ready placeholder for PWA and mobile conversion.</p><Link href="/checkout" className="mt-4 inline-block rounded-full bg-brand-vermilion px-4 py-2 text-white">Proceed to Checkout</Link></div>}

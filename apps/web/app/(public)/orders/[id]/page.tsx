@@ -1,0 +1,1 @@
+export default async function OrderTrack({params}:{params:Promise<{id:string}>}){const {id}=await params; return <div className="container-shell py-12"><h1 className="text-3xl font-bold">Order #{id}</h1><p>Order tracking placeholder for product workflow.</p></div>}
