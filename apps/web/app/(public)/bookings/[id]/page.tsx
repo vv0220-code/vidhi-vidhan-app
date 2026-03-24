@@ -1,0 +1,1 @@
+export default async function BookingTrack({params}:{params:Promise<{id:string}>}){const {id}=await params; return <div className="container-shell py-12"><h1 className="text-3xl font-bold">Booking #{id}</h1><p>Status timeline: pending → inquiry_received → awaiting_confirmation → confirmed → pandit_assigned → in_progress → completed.</p></div>}

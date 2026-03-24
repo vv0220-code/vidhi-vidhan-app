@@ -1,0 +1,1 @@
+export default function Page(){return <div className=\"container-shell py-12\"><h1 className=\"text-3xl font-bold\">admin/login</h1><p className=\"mt-2\">Role-based dashboard/login placeholder with NextAuth-ready structure.</p></div>}

@@ -1,0 +1,1 @@
+import { PanditRegistrationForm } from '@/components/forms/pandit-registration-form'; export default function PanditRegister(){return <div className="container-shell py-12"><h1 className="text-3xl font-bold">Pandit Registration</h1><PanditRegistrationForm/></div>}

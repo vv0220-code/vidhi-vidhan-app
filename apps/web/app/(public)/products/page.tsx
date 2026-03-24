@@ -1,0 +1,2 @@
+import Link from 'next/link'; import { products } from '@/lib/data';
+export default function Products(){return <div className="container-shell py-12"><h1 className="text-3xl font-bold">Puja Products / पूजन सामग्री</h1><div className="mt-5 grid gap-4 md:grid-cols-4">{products.map(p=><Link key={p.slug} href={`/products/${p.slug}`} className="card p-4"><h3>{p.nameHi}</h3><p>{p.nameEn}</p><p className="font-semibold">{p.price}</p></Link>)}</div></div>}
